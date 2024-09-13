@@ -308,7 +308,7 @@
                 <p>Leave Balance: ${leaveBalance} days (${leaveBalanceValue.toFixed(2)} KWD)</p>
                 <p>End of Service Benefit: ${eos.toFixed(2)} KWD</p>
                 <p>Calculation Method: ${calculationMethod === 'standard' ? 'Standard (as per law)' : 'More generous company policy'}</p>
-                ${calculationMethod === 'standard' ? `<p>Capped at 18 times monthly salary: ${cappedAt18Months ? 'Yes' : 'No'}</p>` : ''}
+                ${calculationMethod === 'standard' ? `<p>Capped at 18 times monthly salary: <span style="color: ${cappedAt18Months ? 'red' : 'green'}">${cappedAt18Months ? 'Yes' : 'No'}</span></p>` : ''}
                 <p>Total Benefit (EOS + Leave Balance): ${totalBenefit.toFixed(2)} KWD</p>
             `;
         }
