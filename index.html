@@ -127,6 +127,12 @@
                 <option value="generous">More generous (15 days for first 5 years, 30 days after, no cap)</option>
             </select>
 
+            <label for="terminationType">Reason for Leaving:</label>
+            <select id="terminationType" required>
+                <option value="employer">Terminated by Employer</option>
+                <option value="employee">Resigned by Employee</option>
+            </select>
+
             <button type="submit">Calculate</button>
         </form>
         <div id="result"></div>
@@ -256,6 +262,7 @@
             const unpaidLeaveDays = document.getElementById('unpaidLeave').value === 'yes' ? 
                 Math.max(0, parseInt(document.getElementById('unpaidLeaveDays').value) || 0) : 0;
             const calculationMethod = document.getElementById('calculationMethod').value;
+            const terminationType = document.getElementById('terminationType').value;
 
             let totalDays = calculateDuration(startDate, endDate) - unpaidLeaveDays;
             const years = Math.floor(totalDays / 365);
@@ -281,6 +288,17 @@
                 eos += months * 30 * dailySalary * (years < 5 ? 0.5 : 1);
                 eos += days * dailySalary * (years < 5 ? 0.5 : 1);
 
+                // Adjust for resignation
+                if (terminationType === 'employee') {
+                    if (years < 3) {
+                        eos = 0;
+                    } else if (years < 5) {
+                        eos *= 0.5;
+                    } else if (years < 10) {
+                        eos *= 0.75;
+                    }
+                }
+
                 // Check if capped at 18 months salary
                 const maxEos = totalSalary * 18;
                 if (eos > maxEos) {
@@ -297,6 +315,17 @@
                 // Add remaining months and days
                 eos += months * 30 * dailySalary * (years < 5 ? 0.5 : 1);
                 eos += days * dailySalary * (years < 5 ? 0.5 : 1);
+
+                // Adjust for resignation (apply the same rules as standard calculation)
+                if (terminationType === 'employee') {
+                    if (years < 3) {
+                        eos = 0;
+                    } else if (years < 5) {
+                        eos *= 0.5;
+                    } else if (years < 10) {
+                        eos *= 0.75;
+                    }
+                }
             }
 
             const totalBenefit = eos + leaveBalanceValue;
@@ -309,6 +338,7 @@
                 <p>End of Service Benefit: ${eos.toFixed(2)} KWD</p>
                 <p>Calculation Method: ${calculationMethod === 'standard' ? 'Standard (as per law)' : 'More generous company policy'}</p>
                 ${calculationMethod === 'standard' ? `<p>Capped at 18 times monthly salary: <span style="color: ${cappedAt18Months ? 'red' : 'green'}">${cappedAt18Months ? 'Yes' : 'No'}</span></p>` : ''}
+                <p>Reason for Leaving: ${terminationType === 'employer' ? 'Terminated by Employer' : 'Resigned by Employee'}</p>
                 <p>Total Benefit (EOS + Leave Balance): ${totalBenefit.toFixed(2)} KWD</p>
             `;
         }
