@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kuwait End of Service Calculator | حاسبة مكافأة نهاية الخدمة الكويتية</title>
+    <title>Kuwait End of Service Calculator</title>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
     <style>
         body {
@@ -24,6 +24,31 @@
         h1 {
             text-align: center;
             color: #333;
+            font-size: 1.5em;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            padding: 0 10px;
+            margin-bottom: 10px;
+        }
+        .warning {
+            color: red;
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: bold;
+            font-size: 0.9em;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            padding: 0 10px;
+        }
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 1.2em;
+            }
+            .warning {
+                font-size: 0.8em;
+            }
         }
         label {
             display: block;
@@ -85,11 +110,28 @@
             direction: rtl;
             text-align: right;
         }
-        .warning {
-            color: red;
-            text-align: center;
-            margin-bottom: 20px;
+        #chooseLanguage {
             font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .lang-btn-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        .lang-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 14px;
+            flex: 1;
+            max-width: 100px;
+        }
+        .lang-btn:hover {
+            background-color: #45a049;
         }
     </style>
 </head>
@@ -100,11 +142,12 @@
     </div>
     <div class="container">
         <div class="language-select">
-            <label for="language">Choose Language | اختر اللغة:</label>
-            <select id="language">
-                <option value="en">English</option>
-                <option value="ar">العربية</option>
-            </select>
+            <p id="chooseLanguage">Choose the language | اختر اللغة | Elija el idioma</p>
+            <div class="lang-btn-container">
+                <button onclick="setLanguage('en')" class="lang-btn">English</button>
+                <button onclick="setLanguage('ar')" class="lang-btn">العربية</button>
+                <button onclick="setLanguage('es')" class="lang-btn">Español</button>
+            </div>
         </div>
         <div id="calculatorContent"></div>
     </div>
@@ -186,6 +229,42 @@
                 months: "شهر",
                 KWD: "دينار كويتي",
                 warning: "تحذير: هذا مجرد تقدير. للحصول على نتائج دقيقة، يرجى استشارة محامٍ."
+            },
+            es: {
+                title: "Calculadora de Indemnización por Fin de Servicio de Kuwait",
+                startDate: "Fecha de inicio (dd/mm/aaaa):",
+                endDate: "Fecha esperada del último día de trabajo (dd/mm/aaaa):",
+                salary: "Último salario mensual (KWD):",
+                fixedBenefits: "¿Tiene otros beneficios fijos pagados mensualmente durante más de los últimos 3 meses?",
+                fixedBenefitsValue: "Valor total de los beneficios fijos (KWD):",
+                leaveBalance: "Saldo de vacaciones (días):",
+                unpaidLeave: "¿Tomó alguna licencia sin goce de sueldo?",
+                unpaidLeaveDays: "Total de días de licencia sin goce de sueldo:",
+                calculationMethod: "¿Cómo calcula su empresa la indemnización por fin de servicio?",
+                standardMethod: "Estándar (según la ley)",
+                generousMethod: "Más generoso (15 días por los primeros 5 años, 30 días después, sin límite)",
+                terminationType: "Motivo de la salida:",
+                terminatedByEmployer: "Despedido por el empleador",
+                resignedByEmployee: "Renuncia del empleado",
+                calculate: "Calcular",
+                yes: "Sí",
+                no: "No",
+                totalService: "Servicio total:",
+                totalSalary: "Salario mensual total (incluyendo beneficios):",
+                unpaidLeaveDays: "Licencia sin goce de sueldo:",
+                leaveBalanceResult: "Saldo de vacaciones:",
+                eosBenefit: "Indemnización por fin de servicio:",
+                calculationMethodResult: "Método de cálculo:",
+                standardMethodResult: "Estándar (según la ley)",
+                generousMethodResult: "Política de empresa más generosa",
+                cappedAt18Months: "Limitado a 18 veces el salario mensual:",
+                reasonForLeaving: "Motivo de la salida:",
+                totalBenefit: "Beneficio total (Indemnización + Saldo de vacaciones):",
+                days: "días",
+                years: "años",
+                months: "meses",
+                KWD: "KWD",
+                warning: "Advertencia: Esto es solo una estimación. Para resultados precisos, consulte a un abogado."
             }
         };
 
@@ -248,13 +327,12 @@
             `;
         }
 
-        function updateCalculator() {
-            const lang = document.getElementById('language').value;
+        function setLanguage(lang) {
             document.getElementById('calculatorContent').innerHTML = generateCalculatorHTML(lang);
             setupEventListeners();
+            document.documentElement.lang = lang;
+            document.title = translations[lang].title;
         }
-
-        document.getElementById('language').addEventListener('change', updateCalculator);
 
         function setupEventListeners() {
             function toggleVisibility(elementId, isVisible) {
@@ -324,14 +402,18 @@
         }
 
         function calculateEOS() {
-            const lang = document.getElementById('language').value;
+            const lang = document.documentElement.lang;
             const t = translations[lang];
 
             const startDateString = document.getElementById('startDate').value;
             const endDateString = document.getElementById('endDate').value;
 
             if (!isValidDate(startDateString) || !isValidDate(endDateString)) {
-                document.getElementById('result').innerHTML = '<p class="error">Please enter valid dates in dd/mm/yyyy format.</p>';
+                document.getElementById('result').innerHTML = `<p class="error">${
+                    lang === 'en' ? 'Please enter valid dates in dd/mm/yyyy format.' :
+                    lang === 'ar' ? 'الرجاء إدخال تواريخ صحيحة بتنسيق يوم/شهر/سنة.' :
+                    'Por favor, ingrese fechas válidas en formato dd/mm/aaaa.'
+                }</p>`;
                 return;
             }
 
@@ -340,7 +422,11 @@
             const salary = parseFloat(document.getElementById('salary').value);
 
             if (isNaN(salary) || salary < 1) {
-                document.getElementById('result').innerHTML = '<p class="error">Please enter a valid salary of at least 1 KWD.</p>';
+                document.getElementById('result').innerHTML = `<p class="error">${
+                    lang === 'en' ? 'Please enter a valid salary of at least 1 KWD.' :
+                    lang === 'ar' ? 'الرجاء إدخال راتب صحيح لا يقل عن 1 دينار كويتي.' :
+                    'Por favor, ingrese un salario válido de al menos 1 KWD.'
+                }</p>`;
                 return;
             }
             
@@ -348,7 +434,11 @@
             if (document.getElementById('fixedBenefits').value === 'yes') {
                 fixedBenefits = parseFloat(document.getElementById('fixedBenefitsValue').value);
                 if (isNaN(fixedBenefits) || fixedBenefits <= 0) {
-                    document.getElementById('result').innerHTML = '<p class="error">Please enter a valid fixed benefits value greater than 0.</p>';
+                    document.getElementById('result').innerHTML = `<p class="error">${
+                        lang === 'en' ? 'Please enter a valid fixed benefits value greater than 0.' :
+                        lang === 'ar' ? 'الرجاء إدخال قيمة صحيحة للمزايا الثابتة أكبر من 0.' :
+                        'Por favor, ingrese un valor válido de beneficios fijos mayor que 0.'
+                    }</p>`;
                     return;
                 }
             }
@@ -440,7 +530,7 @@
         }
 
         // Initial setup
-        updateCalculator();
+        setLanguage('en');
     </script>
 </body>
 </html>
