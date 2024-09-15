@@ -85,6 +85,12 @@
             direction: rtl;
             text-align: right;
         }
+        .warning {
+            color: red;
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -142,7 +148,8 @@
                 days: "days",
                 years: "years",
                 months: "months",
-                KWD: "KWD"
+                KWD: "KWD",
+                warning: "Warning: This is only an estimate. For accurate results, please consult a lawyer."
             },
             ar: {
                 title: "حاسبة مكافأة نهاية الخدمة الكويتية",
@@ -177,7 +184,8 @@
                 days: "يوم",
                 years: "سنة",
                 months: "شهر",
-                KWD: "دينار كويتي"
+                KWD: "دينار كويتي",
+                warning: "تحذير: هذا مجرد تقدير. للحصول على نتائج دقيقة، يرجى استشارة محامٍ."
             }
         };
 
@@ -186,6 +194,7 @@
             const rtlClass = lang === 'ar' ? 'rtl' : '';
             return `
                 <h1>${t.title}</h1>
+                <p class="warning">${t.warning}</p>
                 <form id="eosForm" class="${rtlClass}">
                     <label for="startDate">${t.startDate}</label>
                     <input type="text" id="startDate" placeholder="dd/mm/yyyy" maxlength="10" required>
