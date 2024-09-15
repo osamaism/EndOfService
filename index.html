@@ -14,7 +14,7 @@
             background-color: #f4f4f4;
         }
         .container {
-            max-width: 800px;
+            max-width: 600px;
             margin: auto;
             background: #fff;
             padding: 20px;
@@ -25,16 +25,9 @@
             text-align: center;
             color: #333;
         }
-        .label-group {
-            display: flex;
-            justify-content: space-between;
+        label {
+            display: block;
             margin-bottom: 5px;
-        }
-        .label-en {
-            text-align: left;
-        }
-        .label-ar {
-            text-align: right;
         }
         input[type="number"], input[type="text"], select {
             width: 100%;
@@ -58,6 +51,7 @@
         }
         #result {
             margin-top: 20px;
+            font-weight: bold;
         }
         #unpaidLeaveDiv, #fixedBenefitsDiv {
             display: none;
@@ -83,15 +77,12 @@
             height: auto;
             margin-right: 15px;
         }
-        .result-line {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 5px;
+        .language-select {
+            text-align: center;
+            margin-bottom: 20px;
         }
-        .result-en {
-            text-align: left;
-        }
-        .result-ar {
+        .rtl {
+            direction: rtl;
             text-align: right;
         }
     </style>
@@ -102,87 +93,14 @@
         <div class="copyright">© El Baron</div>
     </div>
     <div class="container">
-        <h1>Kuwait End of Service Calculator | حاسبة مكافأة نهاية الخدمة الكويتية</h1>
-        <form id="eosForm">
-            <div class="label-group">
-                <label for="startDate" class="label-en">Start Date (dd/mm/yyyy):</label>
-                <label for="startDate" class="label-ar">تاريخ البدء (يوم/شهر/سنة):</label>
-            </div>
-            <input type="text" id="startDate" placeholder="dd/mm/yyyy | يوم/شهر/سنة" maxlength="10" required>
-
-            <div class="label-group">
-                <label for="endDate" class="label-en">Expected Last Working Day (dd/mm/yyyy):</label>
-                <label for="endDate" class="label-ar">تاريخ آخر يوم عمل متوقع (يوم/شهر/سنة):</label>
-            </div>
-            <input type="text" id="endDate" placeholder="dd/mm/yyyy | يوم/شهر/سنة" maxlength="10" required>
-
-            <div class="label-group">
-                <label for="salary" class="label-en">Last Monthly Salary (KWD):</label>
-                <label for="salary" class="label-ar">آخر راتب شهري (دينار كويتي):</label>
-            </div>
-            <input type="number" id="salary" min="1" step="0.01" required>
-
-            <div class="label-group">
-                <label for="fixedBenefits" class="label-en">Do you have other fixed benefits paid monthly for more than the last 3 months?</label>
-                <label for="fixedBenefits" class="label-ar">هل لديك مزايا ثابتة أخرى تدفع شهريًا لأكثر من الأشهر الثلاثة الأخيرة؟</label>
-            </div>
-            <select id="fixedBenefits">
-                <option value="no">No | لا</option>
-                <option value="yes">Yes | نعم</option>
+        <div class="language-select">
+            <label for="language">Choose Language | اختر اللغة:</label>
+            <select id="language">
+                <option value="en">English</option>
+                <option value="ar">العربية</option>
             </select>
-
-            <div id="fixedBenefitsDiv" style="display: none;">
-                <div class="label-group">
-                    <label for="fixedBenefitsValue" class="label-en">Total Value of Fixed Benefits (KWD):</label>
-                    <label for="fixedBenefitsValue" class="label-ar">القيمة الإجمالية للمزايا الثابتة (دينار كويتي):</label>
-                </div>
-                <input type="number" id="fixedBenefitsValue" min="0.01" step="0.01">
-            </div>
-
-            <div class="label-group">
-                <label for="leaveBalance" class="label-en">Leave Balance (Days):</label>
-                <label for="leaveBalance" class="label-ar">رصيد الإجازات (أيام):</label>
-            </div>
-            <input type="number" id="leaveBalance" min="0" step="1">
-
-            <div class="label-group">
-                <label for="unpaidLeave" class="label-en">Did you take any unpaid leave?</label>
-                <label for="unpaidLeave" class="label-ar">هل أخذت أي إجازة غير مدفوعة؟</label>
-            </div>
-            <select id="unpaidLeave">
-                <option value="no">No | لا</option>
-                <option value="yes">Yes | نعم</option>
-            </select>
-
-            <div id="unpaidLeaveDiv">
-                <div class="label-group">
-                    <label for="unpaidLeaveDays" class="label-en">Total Unpaid Leave Days:</label>
-                    <label for="unpaidLeaveDays" class="label-ar">إجمالي أيام الإجازة غير المدفوعة:</label>
-                </div>
-                <input type="number" id="unpaidLeaveDays" min="0" step="1">
-            </div>
-
-            <div class="label-group">
-                <label for="calculationMethod" class="label-en">How does your company calculate the end of service benefit?</label>
-                <label for="calculationMethod" class="label-ar">كيف تحسب شركتك مكافأة نهاية الخدمة؟</label>
-            </div>
-            <select id="calculationMethod">
-                <option value="standard">Standard (as per law) | قياسي (حسب القانون)</option>
-                <option value="generous">More generous | أكثر سخاء</option>
-            </select>
-
-            <div class="label-group">
-                <label for="terminationType" class="label-en">Reason for Leaving:</label>
-                <label for="terminationType" class="label-ar">سبب ترك العمل:</label>
-            </div>
-            <select id="terminationType" required>
-                <option value="employer">Terminated by Employer | إنهاء الخدمة من قبل صاحب العمل</option>
-                <option value="employee">Resigned by Employee | استقالة الموظف</option>
-            </select>
-
-            <button type="submit">Calculate | احسب</button>
-        </form>
-        <div id="result"></div>
+        </div>
+        <div id="calculatorContent"></div>
     </div>
     <div class="copyright-container">
         <img src="logo.jpg" alt="El Baron Logo" class="logo">
@@ -190,35 +108,187 @@
     </div>
 
     <script>
-        function toggleVisibility(elementId, isVisible) {
-            document.getElementById(elementId).style.display = isVisible ? 'block' : 'none';
-        }
-
-        document.getElementById('unpaidLeave').addEventListener('change', function() {
-            toggleVisibility('unpaidLeaveDiv', this.value === 'yes');
-        });
-
-        document.getElementById('fixedBenefits').addEventListener('change', function() {
-            toggleVisibility('fixedBenefitsDiv', this.value === 'yes');
-        });
-
-        function formatDate(input) {
-            let value = input.value.replace(/\D/g, '');
-            if (value.length > 4) {
-                value = value.slice(0, 2) + '/' + value.slice(2, 4) + '/' + value.slice(4, 8);
-            } else if (value.length > 2) {
-                value = value.slice(0, 2) + '/' + value.slice(2);
+        const translations = {
+            en: {
+                title: "Kuwait End of Service Calculator",
+                startDate: "Start Date (dd/mm/yyyy):",
+                endDate: "Expected Last Working Day (dd/mm/yyyy):",
+                salary: "Last Monthly Salary (KWD):",
+                fixedBenefits: "Do you have other fixed benefits paid monthly for more than the last 3 months?",
+                fixedBenefitsValue: "Total Value of Fixed Benefits (KWD):",
+                leaveBalance: "Leave Balance (Days):",
+                unpaidLeave: "Did you take any unpaid leave?",
+                unpaidLeaveDays: "Total Unpaid Leave Days:",
+                calculationMethod: "How does your company calculate the end of service benefit?",
+                standardMethod: "Standard (as per law)",
+                generousMethod: "More generous (15 days for first 5 years, 30 days after, no cap)",
+                terminationType: "Reason for Leaving:",
+                terminatedByEmployer: "Terminated by Employer",
+                resignedByEmployee: "Resigned by Employee",
+                calculate: "Calculate",
+                yes: "Yes",
+                no: "No",
+                totalService: "Total Service:",
+                totalSalary: "Total Monthly Salary (including benefits):",
+                unpaidLeaveDays: "Unpaid Leave:",
+                leaveBalanceResult: "Leave Balance:",
+                eosBenefit: "End of Service Benefit:",
+                calculationMethodResult: "Calculation Method:",
+                standardMethodResult: "Standard (as per law)",
+                generousMethodResult: "More generous company policy",
+                cappedAt18Months: "Capped at 18 times monthly salary:",
+                reasonForLeaving: "Reason for Leaving:",
+                totalBenefit: "Total Benefit (EOS + Leave Balance):",
+                days: "days",
+                years: "years",
+                months: "months",
+                KWD: "KWD"
+            },
+            ar: {
+                title: "حاسبة مكافأة نهاية الخدمة الكويتية",
+                startDate: "تاريخ البدء (يوم/شهر/سنة):",
+                endDate: "تاريخ آخر يوم عمل متوقع (يوم/شهر/سنة):",
+                salary: "آخر راتب شهري (دينار كويتي):",
+                fixedBenefits: "هل لديك مزايا ثابتة أخرى تدفع شهريًا لأكثر من الأشهر الثلاثة الأخيرة؟",
+                fixedBenefitsValue: "القيمة الإجمالية للمزايا الثابتة (دينار كويتي):",
+                leaveBalance: "رصيد الإجازات (أيام):",
+                unpaidLeave: "هل أخذت أي إجازة غير مدفوعة؟",
+                unpaidLeaveDays: "إجمالي أيام الإجازة غير المدفوعة:",
+                calculationMethod: "كيف تحسب شركتك مكافأة نهاية الخدمة؟",
+                standardMethod: "قياسي (حسب القانون)",
+                generousMethod: "أكثر سخاء (15 يومًا للسنوات الخمس الأولى، 30 يومًا بعد ذلك، بدون حد أقصى)",
+                terminationType: "سبب ترك العمل:",
+                terminatedByEmployer: "إنهاء الخدمة من قبل صاحب العمل",
+                resignedByEmployee: "استقالة الموظف",
+                calculate: "احسب",
+                yes: "نعم",
+                no: "لا",
+                totalService: "مدة الخدمة الإجمالية:",
+                totalSalary: "إجمالي الراتب الشهري (شامل المزايا):",
+                unpaidLeaveDays: "الإجازة غير المدفوعة:",
+                leaveBalanceResult: "رصيد الإجازات:",
+                eosBenefit: "مكافأة نهاية الخدمة:",
+                calculationMethodResult: "طريقة الحساب:",
+                standardMethodResult: "قياسية (حسب القانون)",
+                generousMethodResult: "سياسة الشركة الأكثر سخاء",
+                cappedAt18Months: "الحد الأقصى 18 ضعف الراتب الشهري:",
+                reasonForLeaving: "سبب ترك العمل:",
+                totalBenefit: "إجمالي المستحقات (مكافأة نهاية الخدمة + رصيد الإجازات):",
+                days: "يوم",
+                years: "سنة",
+                months: "شهر",
+                KWD: "دينار كويتي"
             }
-            input.value = value;
+        };
+
+        function generateCalculatorHTML(lang) {
+            const t = translations[lang];
+            const rtlClass = lang === 'ar' ? 'rtl' : '';
+            return `
+                <h1>${t.title}</h1>
+                <form id="eosForm" class="${rtlClass}">
+                    <label for="startDate">${t.startDate}</label>
+                    <input type="text" id="startDate" placeholder="dd/mm/yyyy" maxlength="10" required>
+
+                    <label for="endDate">${t.endDate}</label>
+                    <input type="text" id="endDate" placeholder="dd/mm/yyyy" maxlength="10" required>
+
+                    <label for="salary">${t.salary}</label>
+                    <input type="number" id="salary" min="1" step="0.01" required>
+
+                    <label for="fixedBenefits">${t.fixedBenefits}</label>
+                    <select id="fixedBenefits">
+                        <option value="no">${t.no}</option>
+                        <option value="yes">${t.yes}</option>
+                    </select>
+
+                    <div id="fixedBenefitsDiv" style="display: none;">
+                        <label for="fixedBenefitsValue">${t.fixedBenefitsValue}</label>
+                        <input type="number" id="fixedBenefitsValue" min="0.01" step="0.01">
+                    </div>
+
+                    <label for="leaveBalance">${t.leaveBalance}</label>
+                    <input type="number" id="leaveBalance" min="0" step="1">
+
+                    <label for="unpaidLeave">${t.unpaidLeave}</label>
+                    <select id="unpaidLeave">
+                        <option value="no">${t.no}</option>
+                        <option value="yes">${t.yes}</option>
+                    </select>
+
+                    <div id="unpaidLeaveDiv">
+                        <label for="unpaidLeaveDays">${t.unpaidLeaveDays}</label>
+                        <input type="number" id="unpaidLeaveDays" min="0" step="1">
+                    </div>
+
+                    <label for="calculationMethod">${t.calculationMethod}</label>
+                    <select id="calculationMethod">
+                        <option value="standard">${t.standardMethod}</option>
+                        <option value="generous">${t.generousMethod}</option>
+                    </select>
+
+                    <label for="terminationType">${t.terminationType}</label>
+                    <select id="terminationType" required>
+                        <option value="employer">${t.terminatedByEmployer}</option>
+                        <option value="employee">${t.resignedByEmployee}</option>
+                    </select>
+
+                    <button type="submit">${t.calculate}</button>
+                </form>
+                <div id="result"></div>
+            `;
         }
 
-        document.getElementById('startDate').addEventListener('input', function() {
-            formatDate(this);
-        });
+        function updateCalculator() {
+            const lang = document.getElementById('language').value;
+            document.getElementById('calculatorContent').innerHTML = generateCalculatorHTML(lang);
+            setupEventListeners();
+        }
 
-        document.getElementById('endDate').addEventListener('input', function() {
-            formatDate(this);
-        });
+        document.getElementById('language').addEventListener('change', updateCalculator);
+
+        function setupEventListeners() {
+            function toggleVisibility(elementId, isVisible) {
+                document.getElementById(elementId).style.display = isVisible ? 'block' : 'none';
+            }
+
+            document.getElementById('unpaidLeave').addEventListener('change', function() {
+                toggleVisibility('unpaidLeaveDiv', this.value === 'yes');
+            });
+
+            document.getElementById('fixedBenefits').addEventListener('change', function() {
+                toggleVisibility('fixedBenefitsDiv', this.value === 'yes');
+            });
+
+            function formatDate(input) {
+                let value = input.value.replace(/\D/g, '');
+                if (value.length > 4) {
+                    value = value.slice(0, 2) + '/' + value.slice(2, 4) + '/' + value.slice(4, 8);
+                } else if (value.length > 2) {
+                    value = value.slice(0, 2) + '/' + value.slice(2);
+                }
+                input.value = value;
+            }
+
+            document.getElementById('startDate').addEventListener('input', function() {
+                formatDate(this);
+            });
+
+            document.getElementById('endDate').addEventListener('input', function() {
+                formatDate(this);
+            });
+
+            document.getElementById('eosForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                calculateEOS();
+            });
+
+            // Add event listeners to all input fields
+            const inputFields = document.querySelectorAll('input, select');
+            inputFields.forEach(field => {
+                field.addEventListener('change', calculateEOS);
+            });
+        }
 
         function isValidDate(dateString) {
             const regex = /^(\d{2})\/(\d{2})\/(\d{4})$/;
@@ -245,6 +315,9 @@
         }
 
         function calculateEOS() {
+            const lang = document.getElementById('language').value;
+            const t = translations[lang];
+
             const startDateString = document.getElementById('startDate').value;
             const endDateString = document.getElementById('endDate').value;
 
@@ -336,65 +409,29 @@
                         eos = 0;
                     } else if (years < 5) {
                         eos *= 0.5;
-                    } else if (years < 10) {        eos *= 0.75;
-    }
-}
-}
+                    } else if (years < 10) {
+                        eos *= 0.75;
+                    }
+                }
+            }
 
-const totalBenefit = eos + leaveBalanceValue;
+            const totalBenefit = eos + leaveBalanceValue;
 
-document.getElementById('result').innerHTML = `
-    <div class="result-line">
-        <span class="result-en">Total Service: ${years} years, ${months} months, ${days} days</span>
-        <span class="result-ar">مدة الخدمة الإجمالية: ${years} سنة، ${months} شهر، ${days} يوم</span>
-    </div>
-    <div class="result-line">
-        <span class="result-en">Total Monthly Salary (including benefits): ${totalSalary.toFixed(2)} KWD</span>
-        <span class="result-ar">إجمالي الراتب الشهري (شامل المزايا): ${totalSalary.toFixed(2)} دينار كويتي</span>
-    </div>
-    <div class="result-line">
-        <span class="result-en">Unpaid Leave: ${unpaidLeaveDays} days</span>
-        <span class="result-ar">الإجازة غير المدفوعة: ${unpaidLeaveDays} يوم</span>
-    </div>
-    <div class="result-line">
-        <span class="result-en">Leave Balance: ${leaveBalance} days (${leaveBalanceValue.toFixed(2)} KWD)</span>
-        <span class="result-ar">رصيد الإجازات: ${leaveBalance} يوم (${leaveBalanceValue.toFixed(2)} دينار كويتي)</span>
-    </div>
-    <div class="result-line">
-        <span class="result-en">End of Service Benefit: ${eos.toFixed(2)} KWD</span>
-        <span class="result-ar">مكافأة نهاية الخدمة: ${eos.toFixed(2)} دينار كويتي</span>
-    </div>
-    <div class="result-line">
-        <span class="result-en">Calculation Method: ${calculationMethod === 'standard' ? 'Standard (as per law)' : 'More generous company policy'}</span>
-        <span class="result-ar">طريقة الحساب: ${calculationMethod === 'standard' ? 'قياسية (حسب القانون)' : 'سياسة الشركة الأكثر سخاء'}</span>
-    </div>
-    ${calculationMethod === 'standard' ? `
-    <div class="result-line">
-        <span class="result-en">Capped at 18 times monthly salary: <span style="color: ${cappedAt18Months ? 'red' : 'green'}">${cappedAt18Months ? 'Yes' : 'No'}</span></span>
-        <span class="result-ar">الحد الأقصى 18 ضعف الراتب الشهري: <span style="color: ${cappedAt18Months ? 'red' : 'green'}">${cappedAt18Months ? 'نعم' : 'لا'}</span></span>
-    </div>
-    ` : ''}
-    <div class="result-line">
-        <span class="result-en">Reason for Leaving: ${terminationType === 'employer' ? 'Terminated by Employer' : 'Resigned by Employee'}</span>
-        <span class="result-ar">سبب ترك العمل: ${terminationType === 'employer' ? 'إنهاء الخدمة من قبل صاحب العمل' : 'استقالة الموظف'}</span>
-    </div>
-    <div class="result-line">
-        <span class="result-en">Total Benefit (EOS + Leave Balance): ${totalBenefit.toFixed(2)} KWD</span>
-        <span class="result-ar">إجمالي المستحقات (مكافأة نهاية الخدمة + رصيد الإجازات): ${totalBenefit.toFixed(2)} دينار كويتي</span>
-    </div>
-`;
-}
+            document.getElementById('result').innerHTML = `
+                <p>${t.totalService} ${years} ${t.years}, ${months} ${t.months}, ${days} ${t.days}</p>
+                <p>${t.totalSalary} ${totalSalary.toFixed(2)} ${t.KWD}</p>
+                <p>${t.unpaidLeaveDays} ${unpaidLeaveDays} ${t.days}</p>
+                <p>${t.leaveBalanceResult} ${leaveBalance} ${t.days} (${leaveBalanceValue.toFixed(2)} ${t.KWD})</p>
+                <p>${t.eosBenefit} ${eos.toFixed(2)} ${t.KWD}</p>
+                <p>${t.calculationMethodResult} ${calculationMethod === 'standard' ? t.standardMethodResult : t.generousMethodResult}</p>
+                ${calculationMethod === 'standard' ? `<p>${t.cappedAt18Months} <span style="color: ${cappedAt18Months ? 'red' : 'green'}">${cappedAt18Months ? t.yes : t.no}</span></p>` : ''}
+                <p>${t.reasonForLeaving} ${terminationType === 'employer' ? t.terminatedByEmployer : t.resignedByEmployee}</p>
+                <p>${t.totalBenefit} ${totalBenefit.toFixed(2)} ${t.KWD}</p>
+            `;
+        }
 
-document.getElementById('eosForm').addEventListener('submit', function(e) {
-e.preventDefault();
-calculateEOS();
-});
-
-// Add event listeners to all input fields
-const inputFields = document.querySelectorAll('input, select');
-inputFields.forEach(field => {
-field.addEventListener('change', calculateEOS);
-});
-</script>
+        // Initial setup
+        updateCalculator();
+    </script>
 </body>
 </html>
